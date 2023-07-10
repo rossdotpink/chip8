@@ -1,6 +1,8 @@
-*/.DS_Store
 **/.DS_Store
 **/$HOME
 **/$HOME/*
 **/.cache
-**/.cache/*
+**/.idea
+**/target
+**/zig-cache
+**/zig-out

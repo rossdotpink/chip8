@@ -19,8 +19,14 @@ public class Chip8
         try {
             InputStream romFileStream = Files.newInputStream(Path.of("./test.ch8"));
             byte[] romBytes = romFileStream.readNBytes(4096);
-            for(int i = 0; i < 4096; i+=2) {
-                System.out.printf("%02x%02x\n", romBytes[i], romBytes[i+1]);
+            for(int i = 0; i < romBytes.length; i+=2) {
+                String opCode = String.format("%02X%02X", romBytes[i], romBytes[i+1]);
+                System.out.println(opCode);
+                switch (opCode) {
+                    case "00E0": System.out.println("Clear Screen!");
+                                break;
+                    default: break;
+                }
             }
         } catch (Exception c) {
             System.out.println("Uh oh");
