@@ -9,6 +9,7 @@ typedef union _chip8_t chip8_t;
 union _chip8_t {
   uint8_t v_register[NUM_REGISTERS];
   uint16_t index_register;
+  uint16_t program_counter;
   uint8_t stack[SIZE_STACK];
   uint8_t stack_pointer;
   uint8_t delay_timer;
@@ -19,59 +20,49 @@ union _chip8_t {
 };
 
 int load_rom_file(char *, chip8_t *);
+chip8_t* init_chip8();
 
 int main(int argc, char* argv[]) {
 
-  ch8_stack_t* stack = new_stack();
-  printf("stack* \t= %p, &stack \t= %p\n", stack, &stack);
 
-  printf("result: stack \t= %p, stack->previous \t= %p\tstack->count \t= %d\tstack->value \t= %d\n", stack, stack->previous, stack->count, stack->value);
-  printf("\n");
-  printf("\nPUSHING '1'\n\n");
-  push(&stack, 1);
-  printf("result: stack \t= %p, stack->previous \t= %p\tstack->count \t= %d\tstack->value \t= %d\n", stack, stack->previous, stack->count, stack->value);
-  printf("\n");
-  // printf("After push 1:\tAddress\t'%p'\tPrevious Address\t'%p'Count\t'%d'\tValue\t'%d'\n", stack, stack->previous, stack->count, stack->value);
-  
-  printf("\nPUSHING '2'\n");
-  push(&stack, 2);
-  printf("result: stack \t= %p, stack->previous \t= %p\tstack->count \t= %d\tstack->value \t= %d\n", stack, stack->previous, stack->count, stack->value);
-  printf("\n");
-  // printf("After push 2:\tAddress\t'%p'\tPrevious Address\t'%p'Count\t'%d'\tValue\t'%d'\n", stack, stack->previous, stack->count, stack->value);
-  
-  printf("\nPUSHING '3'\n\n");
-  push(&stack, 3);
-  // printf("After push 3:\tAddress\t'%p'\tPrevious Address\t'%p'Count\t'%d'\tValue\t'%d'\n", stack, stack->previous, stack->count, stack->value);
-
-  // //This causes a segfault!!
-  // ch8_stack_t* previous_stack = stack->previous;
-  // printf("Previous\t%d\t\n", stack->previous);
-
-  // printf("%d\t%d\t\n", stack->value, previous_stack->value);
-  printf("Before pop:\tAddress\t'%p'\tPrevious Address\t'%p'\tCount\t'%d'\tValue\t'%d'\n", stack, stack->previous, stack->count, stack->value);
-  printf("pop(&stack) == %d\n\n", pop(&stack));
-  printf("After pop 3:\tAddress\t'%p'\tPrevious Address\t'%p'\tCount\t'%d'\tValue\t'%d'\n", stack, stack->previous, stack->count, stack->value);
-  printf("pop(&stack) == %d\n\n", pop(&stack));
-  printf("After pop 2:\tAddress\t'%p'\tPrevious Address\t'%p'\tCount\t'%d'\tValue\t'%d'\n", stack, stack->previous, stack->count, stack->value);
-  printf("pop(&stack) == %d\n\n", pop(&stack));
-  printf("After pop 1:\tAddress\t'%p'\tCount\t'%d'\tValue\t'%d'\n", stack, stack->count, stack->value);
-
-  // printf("%d\n", pop(&stack));
-  // printf("%d\n", pop(&stack));
-
-  // printf("The end\n");
-  exit(1);
-
-  chip8_t * system = (chip8_t *) malloc(sizeof(chip8_t));        // Declare our system state object
+  chip8_t* system = init_chip8();
+  printf("main() system = %p\n", system);
 
   load_rom_file(argv[1], system);
+  
+  printf("main() PC         = %u!!\n", system->program_counter);
+  printf("main() MEM_OFFSET = %d!!\n", MEM_OFFSET);
+  printf("0x%03x\t%02x%02x\n", (system->program_counter), system->memory[MEM_OFFSET], system->memory[MEM_OFFSET]);
+
 
   for(int i = 0; i < system->current_rom_size; i += 2) {
-    // printf("0x%03x\t%02x%02x\n", (MEM_OFFSET+(i*4)), system->memory[MEM_OFFSET+i], system->memory[MEM_OFFSET+i+1]);
+    printf("0x%03x\t%02x%02x\n", (MEM_OFFSET+(i*4)), system->memory[MEM_OFFSET+i], system->memory[MEM_OFFSET+i+1]);
 //    if (memcmp(*(buffer+i), zero, 1) == 0) printf("\n Haha");
   }
 
   return OK;
+}
+
+/*
+  Allocates memory for a chip8_t object and returns a pointer to it.
+*/
+chip8_t*
+init_chip8() {
+  // Allocate memory for our system state object
+  chip8_t* system = (chip8_t *) malloc(sizeof(chip8_t));
+
+
+
+  printf("init_chip8() system = %p\n", system);
+  // Initialise stack pointer
+  system->stack_pointer = 0x0;
+
+  // Initialise program counter
+  system->program_counter = 512;
+  printf("init_chip8() - PC         = %u!!\n", system->program_counter);
+  printf("init_chip8() - MEM_OFFSET = %d!!\n", MEM_OFFSET);
+
+  return system;
 }
 
 /*
@@ -111,6 +102,7 @@ load_rom_file(char * file_path, chip8_t * system) {
 
   return(OK);
 }
+
 /*
   00E0 - CLS
   Clear the display.

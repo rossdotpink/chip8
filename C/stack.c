@@ -25,18 +25,14 @@ void push(ch8_stack_t** stack, uint8_t value) {
   //   return;
   // }
 
-  // printf("Update\n\n");
-  // printf("Current value is %d\n", (*stack)->count);
   ch8_stack_t* new_stack = (ch8_stack_t*) malloc(sizeof(ch8_stack_t));
   new_stack->value = value;
   new_stack->count = ((*stack)->count + 1);
-  printf("stack \t= %p\tstack->previous \t= %p\tnew_stack->previous \t= %p\t\n", stack, (*stack)->previous, new_stack->previous);
+  // printf("stack \t= %p\tstack->previous \t= %p\tnew_stack->previous \t= %p\t\n", stack, (*stack)->previous, new_stack->previous);
   new_stack->previous = (*stack);
-  printf("stack \t= %p\tstack->previous \t= %p\tnew_stack->previous \t= %p\t\n", stack, (*stack)->previous, new_stack->previous);
-
-
-  printf("PUSH\t(*stack)->previous \t= %p\t(*stack)->count \t= %d\t(*stack)->value \t= %d\n", (*stack)->previous, (*stack)->count, (*stack)->value);
-  printf("PUSH\t(*new_stack)->previous \t= %p\t(*new_stack)->count \t= %d\t(*new_stack)->value \t= %d\n", new_stack->previous, new_stack->count, new_stack->value);
+  // printf("stack \t= %p\tstack->previous \t= %p\tnew_stack->previous \t= %p\t\n", stack, (*stack)->previous, new_stack->previous);
+  // printf("PUSH\t(*stack)->previous \t= %p\t(*stack)->count \t= %d\t(*stack)->value \t= %d\n", (*stack)->previous, (*stack)->count, (*stack)->value);
+  // printf("PUSH\t(*new_stack)->previous \t= %p\t(*new_stack)->count \t= %d\t(*new_stack)->value \t= %d\n", new_stack->previous, new_stack->count, new_stack->value);
 
   
   (*stack) = new_stack;
@@ -46,10 +42,10 @@ void push(ch8_stack_t** stack, uint8_t value) {
 
 uint8_t pop(ch8_stack_t** stack) {
   // If it's all no good, return zero;
-  if((*stack)->previous == NULL || (*stack)->count == NULL || (*stack)->count == 0) {
+  if((*stack)->previous == NULL || (*stack)->count == 0) {
     return 0;
   }
-  printf("stack \t= %p\tstack->previous \t= %p\n", stack, (*stack)->previous);
+  // printf("stack \t= %p\tstack->previous \t= %p\n", stack, (*stack)->previous);
 
   // // Save the top of (*stack) value
   uint8_t return_value = (*stack)->value;
@@ -67,9 +63,47 @@ uint8_t pop(ch8_stack_t** stack) {
 
   *stack = (*stack)->previous;
 
-
   // Return the value
   return return_value;
+}
 
-  // return 0;
+void test_stack() {
+    ch8_stack_t* stack = new_stack();
+  // printf("stack* \t= %p, &stack \t= %p\n", stack, &stack);
+
+  // printf("result: stack \t= %p, stack->previous \t= %p\tstack->count \t= %d\tstack->value \t= %d\n", stack, stack->previous, stack->count, stack->value);
+  // printf("\n");
+  // printf("\nPUSHING '1'\n\n");
+  push(&stack, 1);
+  // printf("result: stack \t= %p, stack->previous \t= %p\tstack->count \t= %d\tstack->value \t= %d\n", stack, stack->previous, stack->count, stack->value);
+  // printf("\n");
+  // printf("After push 1:\tAddress\t'%p'\tPrevious Address\t'%p'Count\t'%d'\tValue\t'%d'\n", stack, stack->previous, stack->count, stack->value);
+  
+  // printf("\nPUSHING '2'\n");
+  push(&stack, 2);
+  // printf("result: stack \t= %p, stack->previous \t= %p\tstack->count \t= %d\tstack->value \t= %d\n", stack, stack->previous, stack->count, stack->value);
+  // printf("\n");
+  // printf("After push 2:\tAddress\t'%p'\tPrevious Address\t'%p'Count\t'%d'\tValue\t'%d'\n", stack, stack->previous, stack->count, stack->value);
+  
+  // printf("\nPUSHING '3'\n\n");
+  push(&stack, 3);
+  // printf("After push 3:\tAddress\t'%p'\tPrevious Address\t'%p'Count\t'%d'\tValue\t'%d'\n", stack, stack->previous, stack->count, stack->value);
+
+  // //This causes a segfault!!
+  // ch8_stack_t* previous_stack = stack->previous;
+  // printf("Previous\t%d\t\n", stack->previous);
+
+  // printf("%d\t%d\t\n", stack->value, previous_stack->value);
+  // printf("Before pop:\tAddress\t'%p'\tPrevious Address\t'%p'\tCount\t'%d'\tValue\t'%d'\n", stack, stack->previous, stack->count, stack->value);
+  // printf("pop(&stack) == %d\n\n", pop(&stack));
+  // printf("After pop 3:\tAddress\t'%p'\tPrevious Address\t'%p'\tCount\t'%d'\tValue\t'%d'\n", stack, stack->previous, stack->count, stack->value);
+  // printf("pop(&stack) == %d\n\n", pop(&stack));
+  // printf("After pop 2:\tAddress\t'%p'\tPrevious Address\t'%p'\tCount\t'%d'\tValue\t'%d'\n", stack, stack->previous, stack->count, stack->value);
+  // printf("pop(&stack) == %d\n\n", pop(&stack));
+  // printf("After pop 1:\tAddress\t'%p'\tCount\t'%d'\tValue\t'%d'\n", stack, stack->count, stack->value);
+
+  // printf("%d\n", pop(&stack));
+  // printf("%d\n", pop(&stack));
+
+  // printf("The end\n");
 }
