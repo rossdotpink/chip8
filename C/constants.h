@@ -2,8 +2,10 @@
 // Created by Ross Wilson on 09/07/2023.
 //
 
-#ifndef C_ERRORS_H
-#define C_ERRORS_H
+#ifndef C_CONSTANTS_H
+#define C_CONSTANTS_H
+
+// typedef status int;
 
 const int NUM_REGISTERS = 16;
 const int SIZE_STACK = 64;
@@ -15,4 +17,4 @@ const int NOT_OK = 1;
 
 const int MEM_OFFSET = 0x200;
 
-#endif //C_ERRORS_H
+#endif //C_CONSTANTS_H
