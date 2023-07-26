@@ -14,9 +14,9 @@
 
 #define RAYGUI_IMPLEMENTATION
 #define RAYGUI_STANDALONE
-#include "../../src/raygui.h"
+#include "../../raygui.h"
 
-#include "custom_backend.h"
+#include "raygui_custom_backend.h"
 
 //------------------------------------------------------------------------------------
 // Program main entry point

@@ -1,0 +1,1 @@
+cc -lraylib -framework OpenGL -framework Cocoa -framework IOKit -framework CoreAudio -framework CoreVideo -L/opt/homebrew/Cellar/raylib/4.5.0/lib  ./controls_test_suite.c
